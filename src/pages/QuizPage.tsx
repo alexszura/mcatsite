@@ -10,10 +10,41 @@ import { ArrowLeft, CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
 
 interface QuizPageProps {
   topicId: string;
+  useAI: boolean;
   onBack: () => void;
 }
 
-export default function QuizPage({ topicId, onBack }: QuizPageProps) {
+// A mock function to simulate AI question generation
+async function generateAIQuestions(topicName: string): Promise<Question[]> {
+  console.log(`Generating AI questions for topic: ${topicName}`);
+  // In a real app, you would make an API call to your AI service here.
+  // For now, we'll return a sample set of AI-generated questions.
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve([
+        {
+          id: 'ai-1',
+          question: `This is an AI-generated question about ${topicName}. What is the capital of France?`,
+          options: ['Paris', 'London', 'Berlin', 'Madrid'],
+          correctAnswer: 0,
+          explanation: 'Paris is the capital of France.',
+        },
+        {
+          id: 'ai-2',
+          question: `Another AI question for ${topicName}. What is 2 + 2?`,
+          options: ['3', '4', '5', '6'],
+          correctAnswer: 1,
+          explanation: '2 + 2 equals 4.',
+        },
+      ]);
+    }, 1000);
+  });
+}
+
+export default function QuizPage({ topicId, useAI, onBack }: QuizPageProps) {
+  const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   // Find the subtopic (topicId is actually a subtopic id now)
   let subtopic: Subtopic | undefined;
   let parentTopic = TOPICS.find(t => t.subtopics.some(st => st.id === topicId));
@@ -31,53 +62,65 @@ export default function QuizPage({ topicId, onBack }: QuizPageProps) {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showResults, setShowResults] = useState(false);
 
-  const [quizQuestions] = useState<Question[]>(() => {
-    if (!subtopic) return [];
-    
-    // Get current rank for this topic
-    const progress = getTopicProgress(topicId);
-    const currentRankIndex = RANKS.findIndex(r => r.tier === progress.currentRank);
-    
-    // Start with subtopic questions
-    let allQuestions = [...subtopic.questions];
-    
-    // As rank increases, include questions from other chapters
-    if (currentRankIndex >= 2 && parentTopic) { // Silver and above
-      const otherSubtopics = parentTopic.subtopics.filter(st => st.id !== topicId);
-      otherSubtopics.forEach(st => {
-        allQuestions = allQuestions.concat(st.questions);
-      });
-    }
-    
-    if (currentRankIndex >= 4 && parentTopic) { // Platinum and above - add related subjects
-      const relatedSubjects = TOPICS.filter(t => 
-        t.id !== parentTopic!.id && t.category === parentTopic!.category
-      );
-      relatedSubjects.forEach(subject => {
-        subject.subtopics.forEach(st => {
-          allQuestions = allQuestions.concat(st.questions);
-        });
-      });
-    }
-    
-    if (currentRankIndex >= 6) { // Master - all questions in category
-      TOPICS.filter(t => t.category === parentTopic?.category).forEach(subject => {
-        subject.subtopics.forEach(st => {
-          allQuestions = allQuestions.concat(st.questions);
-        });
-      });
-    }
-    
-    // Shuffle and take 10 questions
-    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 10);
-  });
-
   useEffect(() => {
     if (!subtopic) {
       onBack();
+      return;
     }
-  }, [subtopic, onBack]);
+
+    const fetchQuestions = async () => {
+      setIsLoading(true);
+      if (useAI) {
+        const aiQuestions = await generateAIQuestions(subtopic.name);
+        setQuizQuestions(aiQuestions);
+      } else {
+        // Get current rank for this topic
+        const progress = getTopicProgress(topicId);
+        const currentRankIndex = RANKS.findIndex(r => r.tier === progress.currentRank);
+        
+        // Start with subtopic questions
+        let allQuestions = [...subtopic.questions];
+        
+        // As rank increases, include questions from other chapters
+        if (currentRankIndex >= 2 && parentTopic) { // Silver and above
+          const otherSubtopics = parentTopic.subtopics.filter(st => st.id !== topicId);
+          otherSubtopics.forEach(st => {
+            allQuestions = allQuestions.concat(st.questions);
+          });
+        }
+        
+        if (currentRankIndex >= 4 && parentTopic) { // Platinum and above - add related subjects
+          const relatedSubjects = TOPICS.filter(t => 
+            t.id !== parentTopic.id && t.category === parentTopic.category
+          );
+          relatedSubjects.forEach(subject => {
+            subject.subtopics.forEach(st => {
+              allQuestions = allQuestions.concat(st.questions);
+            });
+          });
+        }
+        
+        if (currentRankIndex >= 6) { // Master - all questions in category
+          TOPICS.filter(t => t.category === parentTopic?.category).forEach(subject => {
+            subject.subtopics.forEach(st => {
+              allQuestions = allQuestions.concat(st.questions);
+            });
+          });
+        }
+        
+        // Shuffle and take 10 questions
+        const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+        setQuizQuestions(shuffled.slice(0, 10));
+      }
+      setIsLoading(false);
+    };
+
+    fetchQuestions();
+  }, [topicId, useAI, subtopic, parentTopic, getTopicProgress, onBack]);
+
+  if (isLoading) {
+    return <div>Loading questions...</div>; // Or a spinner component
+  }
 
   if (!subtopic || !parentTopic) return null;
 
@@ -122,6 +165,7 @@ export default function QuizPage({ topicId, onBack }: QuizPageProps) {
     setShowFeedback(false);
     setAnswers({});
     setShowResults(false);
+    // Note: re-fetching questions might be desired on retry
   };
 
   if (showResults) {
@@ -142,6 +186,11 @@ export default function QuizPage({ topicId, onBack }: QuizPageProps) {
       />
     );
   }
+  
+  if (quizQuestions.length === 0) {
+    return <div>No questions available for this topic.</div>; // Handle case where no questions are loaded
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary">

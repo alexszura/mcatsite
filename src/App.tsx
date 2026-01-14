@@ -10,14 +10,16 @@ type Page = 'dashboard' | 'quiz' | 'question-bank';
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  const [useAI, setUseAI] = useState(false); // Add useAI state
   const initializeProgress = useProgressStore(state => state.initializeProgress);
 
   useEffect(() => {
     initializeProgress();
   }, [initializeProgress]);
 
-  const handleStartQuiz = (topicId: string) => {
+  const handleStartQuiz = (topicId: string, useAI: boolean) => {
     setSelectedTopicId(topicId);
+    setUseAI(useAI);
     setCurrentPage('quiz');
   };
 
@@ -40,7 +42,7 @@ function App() {
         <Dashboard onStartQuiz={handleStartQuiz} onViewQuestionBank={handleViewQuestionBank} />
       )}
       {currentPage === 'quiz' && selectedTopicId && (
-        <QuizPage topicId={selectedTopicId} onBack={handleBackToDashboard} />
+        <QuizPage topicId={selectedTopicId} useAI={useAI} onBack={handleBackToDashboard} />
       )}
       {currentPage === 'question-bank' && (
         <QuestionBankPage onBack={handleBackFromQuestionBank} />

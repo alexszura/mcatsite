@@ -20,8 +20,14 @@ export interface Subtopic {
   id: string;
   name: string;
   chapterNumber: number;
-  description: string;
-  questions: Question[];
+  description?: string; // Made optional for grouped subtopics
+  questions?: Question[]; // Made optional for grouped subtopics
+}
+
+export interface SubtopicGroup {
+  id: string;
+  name: string;
+  subtopics: Subtopic[];
 }
 
 export interface Topic {
@@ -30,6 +36,7 @@ export interface Topic {
   category: string;
   description: string;
   subtopics: Subtopic[];
+  subtopicGroups?: SubtopicGroup[]; // Added this line
   // Kept for backward compatibility - flatten all subtopic questions
   questions?: Question[];
 }

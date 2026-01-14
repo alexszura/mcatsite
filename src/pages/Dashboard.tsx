@@ -6,15 +6,18 @@ import RankBadge from '@/components/RankBadge';
 import RankInfoModal from '@/components/RankInfoModal';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Trophy, Info, BookOpen } from 'lucide-react';
 
 interface DashboardProps {
-  onStartQuiz: (topicId: string) => void;
+  onStartQuiz: (topicId: string, useAI: boolean) => void;
   onViewQuestionBank: () => void;
 }
 
 export default function Dashboard({ onStartQuiz, onViewQuestionBank }: DashboardProps) {
   const [showRankInfo, setShowRankInfo] = useState(false);
+  const [useAI, setUseAI] = useState(false);
   const { progress, getOverallRank } = useProgressStore();
   
   const overallRank = getOverallRank();
@@ -93,7 +96,13 @@ export default function Dashboard({ onStartQuiz, onViewQuestionBank }: Dashboard
 
         {/* Topics Section */}
         <section>
-          <h3 className="text-2xl font-bold mb-6">Study Subjects</h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold">Study Subjects</h3>
+            <div className="flex items-center space-x-2">
+              <Switch id="ai-mode" checked={useAI} onCheckedChange={setUseAI} />
+              <Label htmlFor="ai-mode">AI Mode</Label>
+            </div>
+          </div>
           <div className="space-y-6">
             {TOPICS.map(topic => (
               <div key={topic.id} className="bg-card border border-border rounded-xl p-6">
@@ -103,28 +112,50 @@ export default function Dashboard({ onStartQuiz, onViewQuestionBank }: Dashboard
                 </div>
                 
                 <div className="space-y-3">
-                  {topic.subtopics.map(subtopic => (
-                    <div
-                      key={subtopic.id}
-                      onClick={() => onStartQuiz(subtopic.id)}
-                      className="bg-secondary/50 hover:bg-secondary/80 border border-border/50 hover:border-primary/50 rounded-lg p-4 cursor-pointer transition-all duration-300 group"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
-                            Chapter {subtopic.chapterNumber}
-                          </p>
-                          <p className="font-medium">{subtopic.name}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{subtopic.questions.length} questions</p>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm font-bold text-primary group-hover:scale-110 transition-transform">
-                            →
+                  {topic.subtopicGroups ? (
+                    topic.subtopicGroups.map(group => (
+                      <div
+                        key={group.id}
+                        onClick={() => onStartQuiz(group.id, useAI)} // Or handle group-specific logic
+                        className="bg-secondary/50 hover:bg-secondary/80 border border-border/50 hover:border-primary/50 rounded-lg p-4 cursor-pointer transition-all duration-300 group"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">{group.name}</p>
+                            <p className="text-xs text-muted-foreground mt-1">{group.subtopics.length} chapters</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm font-bold text-primary group-hover:scale-110 transition-transform">
+                              →
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    topic.subtopics.map(subtopic => (
+                      <div
+                        key={subtopic.id}
+                        onClick={() => onStartQuiz(subtopic.id, useAI)}
+                        className="bg-secondary/50 hover:bg-secondary/80 border border-border/50 hover:border-primary/50 rounded-lg p-4 cursor-pointer transition-all duration-300 group"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
+                              Chapter {subtopic.chapterNumber}
+                            </p>
+                            <p className="font-medium">{subtopic.name}</p>
+                            <p className="text-xs text-muted-foreground mt-1">{(subtopic.questions?.length || 0)} questions</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm font-bold text-primary group-hover:scale-110 transition-transform">
+                              →
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             ))}
