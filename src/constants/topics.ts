@@ -459,7 +459,7 @@ export const TOPICS: Topic[] = [
               'The disulfide bonds'
             ],
             correctAnswer: 2,
-            explanation: 'Primary structure is the linear sequence of amino acids linked by peptide bonds.'
+            explanation: 'Primary structure is the linear sequence of a protein\'s amino acids linked by peptide bonds.'
           },
           {
             id: 'bio1-2',
@@ -536,6 +536,179 @@ export const TOPICS: Topic[] = [
             ],
             correctAnswer: 1,
             explanation: 'Non-competitive inhibitors bind to the enzyme at a site other than the active site and cannot be overcome by substrate concentration changes.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'psychology-sociology',
+    name: 'Psychology & Sociology',
+    category: 'Behavioral Sciences',
+    description: 'Psychological, social, and biological foundations of behavior.',
+    subtopics: [
+      {
+        id: 'psych-soc-part1',
+        name: 'Behavioral Sciences Part 1: Ch 1-4',
+        description: 'Biology & Behavior, Sensation & Perception, Learning & Memory, Cognition, Consciousness & Language.',
+        questions: [
+          {
+            id: 'ps1-1',
+            question: 'Which part of the brain is primarily responsible for processing visual information?',
+            options: [
+              'Frontal lobe',
+              'Temporal lobe',
+              'Parietal lobe',
+              'Occipital lobe'
+            ],
+            correctAnswer: 3,
+            explanation: 'The occipital lobe, located at the back of the head, is the visual processing center of the brain.'
+          },
+          {
+            id: 'ps2-1',
+            question: 'Which of the following is responsible for color vision?',
+            options: [
+              'Rods',
+              'Cones',
+              'Cornea',
+              'Lens'
+            ],
+            correctAnswer: 1,
+            explanation: 'Cones are photoreceptor cells in the retina that are responsible for color vision and function best in bright light.'
+          },
+          {
+            id: 'ps3-1',
+            question: 'In classical conditioning, a previously neutral stimulus that, after being associated with an unconditioned stimulus, comes to trigger a conditioned response is known as a(n):',
+            options: [
+              'Unconditioned Stimulus (UCS)',
+              'Conditioned Stimulus (CS)',
+              'Unconditioned Response (UCR)',
+              'Conditioned Response (CR)'
+            ],
+            correctAnswer: 1,
+            explanation: 'The conditioned stimulus (e.g., a bell) is the initially neutral stimulus that, through association, elicits the learned response.'
+          },
+          {
+            id: 'ps4-1',
+            question: 'Which cognitive bias involves favoring information that confirms pre-existing beliefs?',
+            options: [
+              'Hindsight bias',
+              'Anchoring bias',
+              'Confirmation bias',
+              'Availability heuristic'
+            ],
+            correctAnswer: 2,
+            explanation: 'Confirmation bias is the tendency to search for, interpret, favor, and recall information that confirms or supports one\'s prior beliefs or values.'
+          }
+        ]
+      },
+      {
+        id: 'psych-soc-part2',
+        name: 'Behavioral Sciences Part 2: Ch 5-8',
+        description: 'Motivation, Emotion & Stress, Identity & Personality, Psychological Disorders, Social Processes, Attitudes & Behavior.',
+        questions: [
+          {
+            id: 'ps5-1',
+            question: 'According to Maslow\'s hierarchy of needs, which of the following is the most fundamental need?',
+            options: [
+              'Self-actualization',
+              'Esteem',
+              'Love and belonging',
+              'Physiological needs'
+            ],
+            correctAnswer: 3,
+            explanation: 'Physiological needs, such as air, water, food, and shelter, are the most basic and must be met before higher-level needs can be addressed.'
+          },
+          {
+            id: 'ps6-1',
+            question: 'Which of the "Big Five" personality traits is characterized by organization, discipline, and carefulness?',
+            options: [
+              'Openness',
+              'Conscientiousness',
+              'Extraversion',
+              'Agreeableness'
+            ],
+            correctAnswer: 1,
+            explanation: 'Conscientiousness is a personality trait that involves being careful, diligent, and organized.'
+          },
+          {
+            id: 'ps7-1',
+            question: 'A person with an irrational fear of spiders is likely suffering from which type of psychological disorder?',
+            options: [
+              'Generalized Anxiety Disorder',
+              'Panic Disorder',
+              'Specific Phobia',
+              'Obsessive-Compulsive Disorder'
+            ],
+            correctAnswer: 2,
+            explanation: 'A specific phobia is an anxiety disorder characterized by an intense, irrational fear of a specific object or situation, such as spiders (arachnophobia).'
+          },
+          {
+            id: 'ps8-1',
+            question: 'The tendency for individuals to exert less effort when working in a group than when working alone is known as:',
+            options: [
+              'Groupthink',
+              'Social facilitation',
+              'Social loafing',
+              'Deindividuation'
+            ],
+            correctAnswer: 2,
+            explanation: 'Social loafing is the phenomenon where individuals in a group setting put in less effort, assuming others will pick up the slack.'
+          }
+        ]
+      },
+      {
+        id: 'psych-soc-part3',
+        name: 'Behavioral Sciences Part 3: Ch 9-12',
+        description: 'Social Interaction, Social Thinking, Social Structure & Demographics, and Social Stratification.',
+        questions: [
+          {
+            id: 'ps9-1',
+            question: 'Which of the following best describes "groupthink"?',
+            options: [
+              'A mode of thinking where the desire for harmony in a group overrides a realistic appraisal of alternatives.',
+              'The tendency for a group to make decisions that are more extreme than the initial inclination of its members.',
+              'The loss of self-awareness and self-restraint occurring in group situations.',
+              'Improved performance on simple or well-learned tasks in the presence of others.'
+            ],
+            correctAnswer: 0,
+            explanation: 'Groupthink occurs when a group\'s desire for conformity leads to an irrational or dysfunctional decision-making outcome.'
+          },
+          {
+            id: 'ps10-1',
+            question: 'Attributing your own successes to internal factors while attributing your failures to external factors is an example of:',
+            options: [
+              'Fundamental attribution error',
+              'Self-serving bias',
+              'Actor-observer bias',
+              'Just-world hypothesis'
+            ],
+            correctAnswer: 1,
+            explanation: 'Self-serving bias is the common habit of a person taking credit for positive events or outcomes, but blaming outside factors for negative events.'
+          },
+          {
+            id: 'ps11-1',
+            question: 'The demographic transition model describes population change over time. What happens in Stage 2?',
+            options: [
+              'High birth rates and high death rates.',
+              'High birth rates and declining death rates.',
+              'Declining birth rates and declining death rates.',
+              'Low birth rates and low death rates.'
+            ],
+            correctAnswer: 1,
+            explanation: 'In Stage 2 of the demographic transition, death rates fall due to improvements in food supply and sanitation, but birth rates remain high, leading to rapid population growth.'
+          },
+          {
+            id: 'ps12-1',
+            question: 'The ability to move up or down in social class is known as:',
+            options: [
+              'Social reproduction',
+              'Social mobility',
+              'Social stratification',
+              'Social capital'
+            ],
+            correctAnswer: 1,
+            explanation: 'Social mobility refers to the movement of individuals, families, or groups through a system of social hierarchy or stratification.'
           }
         ]
       }
